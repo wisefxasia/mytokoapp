@@ -1,7 +1,4 @@
-// Project Name: IonicEcommerce
-// Project URI: http://ionicecommerce.com
-// Author: VectorCoder Team
-// Author URI: http://vectorcoder.com/
+
 
 import { Injectable } from "@angular/core";
 import { Http } from "@angular/http";
