@@ -1,0 +1,44 @@
+page-add-review {
+    .write-review-page{
+        background-color: $white;
+
+        h4{
+            margin-top: 5px !important;
+        }
+
+        .stars-list{
+            display: flex;
+            align-items: center;
+            padding-left: 0;
+            li{
+                display: inline-block;
+
+                h5{
+                    color:color($colors, secondary);
+                    margin-right: 10px;
+                    margin-bottom: 0;
+                }
+                .icon{
+                    color: #f8ce0b;
+                    font-size: 30px;
+                    margin-right: 2px;
+                }
+            }
+        }
+
+        .item{
+            background-color: transparent;
+        }
+    }
+    .footer{
+        .button{
+            border-radius: 0;
+            height: 45px;
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+    }
+    .animate {
+        animation: bounceInRight 0.75s;
+    }
+}

@@ -1,0 +1,88 @@
+<ion-header>
+
+  <ion-navbar>
+    <button ion-button icon-only menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+
+    <ion-title>
+      {{'Edit Profile'| translate }}
+    </ion-title>
+
+    <ion-buttons end>
+      <button ion-button icon-only (click)="openSearch()">
+        <ion-icon name="search"></ion-icon>
+      </button>
+      <button ion-button icon-only class="cart-button" (click)="openCart()">
+        <ion-icon name="cart">
+          <ion-badge color="secondary">{{shared.cartquantity}}</ion-badge>
+        </ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+<ion-content class="page-my-account" padding>
+  <ion-row>
+    <ion-col col-12>
+      <div class="photo">
+        <div class="image">
+          <img class="avatar" src="{{shared.customerData.avatar_url}}">
+        </div>
+      </div>
+    </ion-col>
+  </ion-row>
+
+  <form #userForm="ngForm" (ngSubmit)="updateInfo()">
+    <ion-row>
+      <ion-col>
+        <ion-list>
+
+          <ion-item>
+            <ion-input type="text" placeholder="{{'First Name'|translate}}" [(ngModel)]="myAccountData.first_name" name="customers_firstname"
+              required></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-input type="text" placeholder="{{'Last Name'|translate}}" [(ngModel)]="myAccountData.last_name" name="customers_lastname"
+              required></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-input type="password" placeholder="{{'New Password'|translate}}" [(ngModel)]="password" name="password"></ion-input>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col>
+        <button ion-button block color="secondary" type="submit" [disabled]="!userForm.form.valid">{{'Update'|translate}}</button>
+      </ion-col>
+    </ion-row>
+  </form>
+
+  <!-- <form #passwordForm="ngForm" (ngSubmit)="updatePassword()">
+
+    <ion-row>
+      <ion-col>
+        <ion-list>
+          <ion-item>
+            <ion-input type="password" placeholder="{{'Current Password'|translate}}" [(ngModel)]="passwordData.currentPassword" name="currentPassword"
+              required></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-input type="password" placeholder=" {{'New Password'|translate}}" [(ngModel)]="passwordData.customers_password" name="customers_password"
+              required></ion-input>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col>
+        <button ion-button block color="secondary" type="submit" [disabled]="!passwordForm.form.valid">{{'Change Password'|translate}}</button>
+      </ion-col>
+    </ion-row>
+  </form> -->
+</ion-content>

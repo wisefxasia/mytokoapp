@@ -1,0 +1,28 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      {{'Shipping Method'| translate }}
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-row radio-group>
+    <div *ngFor="let m of shippingMethod" col-12>
+      <ion-col *ngIf="m.enabled && checkFreeShipping(m)">
+        <ion-list>
+          <ion-item>
+            <ion-label>{{m.title}}
+              <span *ngIf="m.settings.cost">{{m.settings.cost.value|curency}}</span>
+            </ion-label>
+            <ion-radio [value]=[m] (ionSelect)="setMethod(m)"></ion-radio>
+          </ion-item>
+
+        </ion-list>
+      </ion-col>
+    </div>
+  </ion-row>
+</ion-content>
+<ion-footer>
+  <button ion-button block color="secondary" (click)="proceedOrder()" [disabled]="shared.shipping_lines.length==0">{{'Next'|translate}}</button>
+</ion-footer>

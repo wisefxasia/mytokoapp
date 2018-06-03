@@ -1,0 +1,14 @@
+<ion-content class="page-intro">
+  <ion-slides pager="true" dir="{{shared.dir}}">
+    <ion-slide *ngFor="let s of slides; let i = index" padding>
+      <div class="page-intro-image">
+        <img class="image" src="{{s.image}}">
+      </div>
+      <ion-icon name="{{s.icon}}"></ion-icon>
+      <h2 class="slide-title">{{s.title|translate}}</h2>
+      <p>{{s.description}}</p>
+      <button ion-button outline small color="secondary" *ngIf="i+1!=slides.length" (click)="openHomePage()">{{ 'Skip' | translate }}</button>
+      <button ion-button outline small color="secondary" *ngIf="i+1==slides.length" (click)="openHomePage()">{{ 'Done' | translate }}</button>
+    </ion-slide>
+  </ion-slides>
+</ion-content>

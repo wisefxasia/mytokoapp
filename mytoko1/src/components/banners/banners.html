@@ -1,0 +1,6 @@
+<ion-slides pager="true" paginationType="bullets" dir="{{shared.dir}}">
+  <ion-slide *ngFor="let b of shared.banners" (click)="bannerClick(b)">
+    <img src="{{b.banners_image}}">
+  </ion-slide>
+</ion-slides>
+<!-- autoplay="5000" -->

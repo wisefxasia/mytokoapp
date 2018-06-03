@@ -1,0 +1,168 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      {{'Order Detail'| translate }}
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content class="page-order-detail">
+  <ion-card>
+    <ion-card-header>
+      {{'Shipping Address'|translate}}
+    </ion-card-header>
+    <ion-card-content>
+      {{order.shipping.address_1+', '+order.shipping.city+', '+order.shipping.state+' '+order.shipping.postcode+', '+order.shipping.country}}
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header>
+      {{'Billing Address'|translate}}
+    </ion-card-header>
+    <ion-card-content>
+      {{order.billing.address_1+', '+order.billing.city+', '+order.billing.state+' '+order.billing.postcode+', '+order.billing.country}}
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card *ngFor="let s of order.shipping_lines">
+    <ion-card-header>
+      {{'Shipping Method'|translate}}
+    </ion-card-header>
+    <ion-card-content>
+      {{s.method_title}}
+    </ion-card-content>
+  </ion-card>
+  <ion-card>
+    <ion-card-header>
+      {{'Shipping'|translate}} {{'Total'|translate}}
+    </ion-card-header>
+    <ion-card-content>
+      {{order.shipping_total|curency}}
+    </ion-card-content>
+  </ion-card>
+
+
+  <ion-card class="order-product">
+    <ion-card-header>
+      {{'Products'|translate}}
+    </ion-card-header>
+    <ion-card-content *ngFor="let product of order.line_items">
+      <ion-row>
+        <h3>{{product.name}}
+          <br>
+          <small>{{product.categories_name}}</small>
+        </h3>
+      </ion-row>
+      <ion-item>
+
+
+        <ion-row>
+          <ion-col col-6>{{'Price' |translate}}&nbsp;:&nbsp;</ion-col>
+          <ion-col col-6>{{product.price| curency}}</ion-col>
+        </ion-row>
+
+        <ion-row *ngFor="let att of product.meta_data">
+          <ion-col col-6>{{att.key}}&nbsp;:</ion-col>
+          <ion-col col-6>{{att.value}}</ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col col-6>{{'Quantity'|translate}}&nbsp;:&nbsp;</ion-col>
+          <ion-col col-6>{{product.quantity}}</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col col-6>
+            <strong>{{'Total' |translate}}</strong>&nbsp;:&nbsp;</ion-col>
+          <ion-col col-6>
+            <strong>{{product.total| curency}}</strong>
+          </ion-col>
+        </ion-row>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+
+
+  <ion-card>
+    <ion-card-header>
+      {{'Price Detail'|translate}}
+    </ion-card-header>
+    <ion-card-content>
+      <ion-row>
+        <ion-col col-6>
+          {{'Shipping'|translate}} {{'Tax'|translate}}
+        </ion-col>
+        <ion-col col-6 text-right>
+          {{order.shipping_tax | curency }}
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col col-6>
+          {{'Shipping'|translate}}
+        </ion-col>
+        <ion-col col-6 text-right>
+          {{order.shipping_total | curency }}
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col col-6>
+          {{'Tax'|translate}}
+        </ion-col>
+        <ion-col col-6 text-right>
+          {{order.discount_total | curency }}
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col col-6>
+          {{'Total'|translate}}
+        </ion-col>
+        <ion-col col-6 text-right>
+          {{order.total | curency}}
+        </ion-col>
+      </ion-row>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card *ngIf="order.coupon_lines!=0">
+    <ion-card-header>
+      {{'Coupons Applied'|translate}}
+    </ion-card-header>
+    <ion-card-content>
+      <ion-row>
+        <ion-col col-6>
+          {{'Coupon Code'|translate}}
+        </ion-col>
+        <ion-col col-6 text-right>
+          {{'Coupon Price'|translate}}
+        </ion-col>
+      </ion-row>
+      <ion-row *ngFor="let c of order.coupon_lines">
+        <ion-col col-6>
+          {{c.code}}
+        </ion-col>
+        <ion-col col-6 text-right>
+          {{c.discount|curency}}
+        </ion-col>
+      </ion-row>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card *ngIf="order.customer_note!=''">
+    <ion-card-header>
+      {{'Order Notes'|translate}}
+    </ion-card-header>
+    <ion-card-content>
+      {{order.customer_note}}
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header>
+      {{'Payment Method'|translate}}
+    </ion-card-header>
+    <ion-card-content>
+      {{order.payment_method_title}}
+    </ion-card-content>
+  </ion-card>
+</ion-content>

@@ -1,0 +1,223 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      {{'Product Details'| translate }}
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content class="page-product-detail" >
+  <div class="product-tags-top">
+    <div class="product-tag-new" *ngIf="checkProductNew()">{{'New'|translate}}</div>
+    <div class="product-tag-featured" *ngIf="product.featured">{{'Featured'|translate}}</div>
+  </div>
+
+  <div class="icons">
+    <ion-icon name="share" (click)="share()"></ion-icon>
+    <ion-icon [name]="isLiked==0 ? 'heart-outline' : 'heart'" (click)="clickWishList()"></ion-icon>
+  </div>
+  <!-- 2.0 updates start -->
+  <ion-slides class="product-slides" pager="true" dir="{{shared.dir}}">
+    <ion-slide *ngFor="let b of product.images">
+      <div>
+        <img src="{{b.src}}" imageViewer>
+      </div>
+    </ion-slide>
+  </ion-slides>
+  <!-- 2.0 updates end -->
+
+  <ion-grid class="product-detail-title">
+    <ion-row>
+
+      <div class="product-tags">
+        <div class="product-tag-off" *ngIf="product.on_sale">{{'SALE'|translate}}</div>
+
+      </div>
+      <!-- 2.0 updates -->
+
+      <ion-col class="woo-price-group" col-12>
+        <span class="woo-price" [innerHTML]="product.price_html"></span>
+        <span class="woo-price" *ngIf="variationPrice!=null">{{'Your Price'|translate}} &nbsp; {{variationPrice|curency}}</span>
+
+
+        <span class="product-outstock" *ngIf="!product.in_stock">{{'Out of Stock'|translate}}</span>
+        <span class="product-instock" *ngIf="product.in_stock">{{'In Stock'|translate}}&nbsp;
+          <span *ngIf="product.stock_quantity!=null">({{product.stock_quantity}})</span>
+        </span>
+      </ion-col>
+
+      <ion-col class="product-title" col-12>
+        <h3>{{product.name}}
+          <br>
+          <small *ngFor="let b of product.categories">{{b.name}}&nbsp;</small>
+        </h3>
+        <ion-spinner *ngIf="ratingStarsValue==null"></ion-spinner>
+        <div class="product-rating animate" *ngIf="product.reviews_allowed && ratingStarsValue!=null" (click)="openReviewsPage()">
+          <div class="stars-outer">
+            <div class="stars-inner" [style.width]="ratingStarsValue+'%'"></div>
+          </div>
+          <h6>{{reviews.length}}&nbsp;{{'rating and review'|translate}}</h6>
+        </div>
+        <!-- <p style="display:none;">{{'Total Sales'|translate}}&nbsp;({{product.total_sales}})</p> -->
+      </ion-col>
+
+    </ion-row>
+  </ion-grid>
+
+  <ion-grid class="product-detail-header" *ngIf="product.type!='grouped'">
+    <ion-row>
+      <ion-col class="left" col-6>
+        <ion-row>
+          <ion-col class="qty-name" col-12>{{'Quantity' |translate}}</ion-col>
+          <ion-col class="qty-vlue" col-12>
+            <button ion-button small outline (click)="qunatityMinus(product,quantity);" *ngIf="!product.sold_individually">
+              <ion-icon name="remove"></ion-icon>
+            </button>
+            <span class="dgi">{{quantity}}</span>
+            <button ion-button small outline (click)="qunatityPlus(product,quantity);" *ngIf="!product.sold_individually">
+              <ion-icon name="add"></ion-icon>
+            </button>
+          </ion-col>
+        </ion-row>
+      </ion-col>
+      <ion-col class="right" col-6 *ngIf="selectedVariation!=null && !disableCartButton">
+        <ion-row>
+          <ion-col class="ttl-name" col-12>{{'Total Price' |translate}}</ion-col>
+          <ion-col class="ttl-vlue" col-12>{{ quantity*selectedVariation.price|curency}}</ion-col>
+        </ion-row>
+      </ion-col>
+      <ion-col class="right" col-6 *ngIf="product.type!='variable'">
+        <ion-row>
+          <ion-col class="ttl-name" col-12>{{'Total Price' |translate}}</ion-col>
+          <ion-col class="ttl-vlue" col-12>{{ quantity*product.price|curency}}</ion-col>
+        </ion-row>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <!-- <button ion-button block color="danger" *ngIf="!product.in_stock">{{'OUT OF STOCK'|translate}}</button> -->
+      <ion-col col-12>{{'Please select all product options before adding this product to your cart'|translate}}</ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-grid class="product-detail-content" *ngIf="product.sku!=null && product.sku!=''">
+    <ion-row>
+      <ion-col col-12>
+        <h4>{{'SKU'|translate}}</h4>
+        <div class="product-describtion">{{product.sku}}</div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-list class="group-product" *ngIf="groupProducts.length!=0">
+    <ion-item *ngFor="let g of groupProducts">
+      <ion-thumbnail item-start>
+        <img src="{{g.images[0].src}}">
+      </ion-thumbnail>
+      <h3>{{g.name}}</h3>
+      <span class="woo-price" [innerHTML]="g.price_html"></span>
+
+      <ion-row class="qty-box-total">
+        <ion-col class="left" col-6>
+          <ion-row>
+            <ion-col class="qty-name" col-12>{{'Quantity' |translate}}</ion-col>
+            <ion-col class="qty-vlue" col-12>
+              <button ion-button small outline (click)="qunatityGroupMinus(g)">
+                <ion-icon name="remove"></ion-icon>
+              </button>
+              <span class="dgi">{{g.quantity}}</span>
+              <button ion-button small outline (click)="qunatityGroupPlus(g)">
+                <ion-icon name="add"></ion-icon>
+              </button>
+            </ion-col>
+          </ion-row>
+        </ion-col>
+        <ion-col class="right" col-6>
+          <ion-row>
+            <ion-col class="ttl-name" col-12>{{'Total Price' |translate}}</ion-col>
+            <ion-col class="ttl-vlue" col-12>{{ g.quantity*g.price|curency}}</ion-col>
+          </ion-row>
+        </ion-col>
+      </ion-row>
+    </ion-item>
+  </ion-list>
+
+  <ion-grid class="product-detail-content product-tags" *ngIf="product.type!='variable' && attributes.length!=0">
+    <ion-row>
+      <ion-col>
+        <h4>{{'Tags'|translate}}</h4>
+        <span *ngFor=" let att of attributes">
+          <span *ngIf="product.type!='variable'">
+            <span *ngIf="att.visible">
+              <h6>{{att.name}}</h6>
+              <ion-badge *ngFor=" let val of att.options">{{val}} </ion-badge>
+            </span>
+          </span>
+        </span>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-grid *ngIf="product.type=='variable'">
+    <ion-list>
+      <div *ngFor=" let att of attributes; let ind = index">
+        <ion-item *ngIf="att.variation">
+          <ion-label>{{att.name}}</ion-label>
+          <ion-select [(ngModel)]="att.value" (ionChange)="fillAttributes(att.value,att.name,ind)" okText="{{'Ok'|translate}}" cancelText="{{'Cancel'|translate}}">
+            <span *ngFor=" let val of att.options; let i = index">
+              <ion-option value="choose" selected *ngIf="i==0">{{'Select'|translate}}</ion-option>
+              <ion-option [value]="val" *ngIf="availableOption(att.name,val)">{{val}}</ion-option>
+            </span>
+          </ion-select>
+        </ion-item>
+      </div>
+    </ion-list>
+
+    <ion-row>
+      <ion-col>
+        <span *ngFor=" let att of attributes">
+          <span *ngIf="!att.variation">
+            <span *ngIf="att.visible">
+              <h6>{{att.name}}</h6>
+              <ion-badge *ngFor=" let val of att.options">{{val}} </ion-badge>
+            </span>
+          </span>
+        </span>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+
+  <ion-grid class="product-detail-content" *ngIf="product.description!=null && product.description!=''">
+    <ion-row>
+      <ion-col col-12>
+        <h4>{{'Product Description'|translate}}</h4>
+        <div class="product-describtion" [innerHTML]="product.description"></div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <!-- 2.0 updates start -->
+
+  <ion-grid class="product-detail-content animate-product">
+    <ion-spinner *ngIf="releatedItems.length==0" class="spinner-related-items"></ion-spinner>
+    <ion-row *ngIf="releatedItems.length!=0">
+
+      <ion-col col-12>
+        <h4>{{'Releated Items'|translate}}</h4>
+        <ion-slides slidesPerView=2.2 spaceBetween=10 class="animate-product" dir="{{shared.dir}}">
+          <ion-slide *ngFor="let p of releatedItems">
+            <product [data]="p" [type]="'normal'"></product>
+          </ion-slide>
+        </ion-slides>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <!-- 2.0 updates end -->
+  <ion-fab right bottom *ngIf="selectAttributes.length!=0">
+    <button color="danger" ion-fab  (click)="resetAttributes()">{{'clear'|translate}}</button>
+  </ion-fab>
+
+</ion-content>
+<ion-footer>
+  <button ion-button block color="secondary" [disabled]="disableCartButton" *ngIf="product.type!='external'" (click)="addToCartProduct()">{{'Add to Cart'|translate}}</button>
+  <button ion-button block color="secondary" [disabled]="disableCartButton" *ngIf="product.type=='external'" (click)="openProduct()">{{product.button_text|translate}}</button>
+</ion-footer>
